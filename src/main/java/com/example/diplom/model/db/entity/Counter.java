@@ -6,11 +6,10 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.FieldDefaults;
-
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.List;
+
 
 @Getter
 @Setter
@@ -54,6 +53,4 @@ public class Counter {
     @ManyToOne
     TypeCounter typeCounter;
 
-    @OneToMany
-    List<Value> values;
 }

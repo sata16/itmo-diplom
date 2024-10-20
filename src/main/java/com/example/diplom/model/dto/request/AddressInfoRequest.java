@@ -20,7 +20,7 @@ public class AddressInfoRequest {
     String house;
     String korpus;
     String flat;
-    @NotNull
+    //@NotNull
     String codeFias;
 
 }

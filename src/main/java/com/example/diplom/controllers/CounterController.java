@@ -1,6 +1,8 @@
 package com.example.diplom.controllers;
 
 import com.example.diplom.model.dto.request.CounterInfoRequest;
+import com.example.diplom.model.dto.request.CounterToAddressRequest;
+import com.example.diplom.model.dto.request.CounterToTypeCounterRequest;
 import com.example.diplom.model.dto.response.CounterInfoResponse;
 import com.example.diplom.service.CounterService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -9,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 
+import javax.validation.Valid;
 import java.util.List;
 @Tag(name = "Приборы учета")
 @RestController
@@ -44,6 +47,18 @@ public class CounterController {
     @Operation(summary = "Получить все приборы учета")
     public List<CounterInfoResponse> getAllCounters(){
         return counterService.getAllCounters();
+    }
+
+    @PostMapping("/counterToAddress")
+    @Operation(summary = "Добавить прибор учета на адрес")
+    public void addCounterToAddress(@RequestBody @Valid CounterToAddressRequest request){
+         counterService.addCounterToAddress(request);
+    }
+
+    @PostMapping("/counterToType")
+    @Operation(summary = "Связать прибор учета с характеристиками")
+    public void addCounterToTypeCounter(@RequestBody @Valid CounterToTypeCounterRequest request){
+        counterService.addCounterToTypeCounter(request);
     }
 
 }

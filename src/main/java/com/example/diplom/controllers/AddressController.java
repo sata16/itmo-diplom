@@ -6,11 +6,13 @@ import com.example.diplom.service.AddressService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.Collections;
 import java.util.List;
+
 @Tag(name = "Адреса")
 @RestController
 @RequestMapping("/api/addresses")
@@ -48,4 +50,25 @@ public class AddressController {
     public List<AddressInfoResponse> getAllAddress(){
         return addressService.getAllAddress();
     }
+    @GetMapping("/allAndCounter")
+    @Operation(summary = "Получить список адресов с ПУ")
+    public Page<AddressInfoResponse> getAllAddressAndCounter(@RequestParam(defaultValue = "1") Integer page,
+                                          @RequestParam(defaultValue = "10") Integer perPage,
+                                          @RequestParam(defaultValue = "nameDistrict") String sort,
+                                          @RequestParam(defaultValue = "ASC") Sort.Direction order,
+                                          @RequestParam(required = false) String filter) {
+    return addressService.getAllAddressAndCounter(page, perPage, sort, order, filter);
+    }
+
+    @GetMapping("/allAndDist")
+    @Operation(summary = "Получить список адресов с фильтром на район")
+    public Page<AddressInfoResponse> getAllAddressDist(@RequestParam(defaultValue = "1") Integer page,
+                                                             @RequestParam(defaultValue = "10") Integer perPage,
+                                                             @RequestParam(defaultValue = "codeDistrict") String sort,
+                                                             @RequestParam(defaultValue = "ASC") Sort.Direction order,
+                                                             @RequestParam(required = false) String filter) {
+        return addressService.getAllAddressDist(page, perPage, sort, order, filter);
+    }
+
+
 }

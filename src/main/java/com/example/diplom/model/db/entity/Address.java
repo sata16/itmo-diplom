@@ -5,10 +5,8 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.FieldDefaults;
-
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Getter
 @Setter
@@ -53,15 +51,6 @@ public class Address {
     @Column(name = "status")
     @Enumerated(EnumType.STRING)
     AddressStatus status;
-
-    @ManyToMany(mappedBy = "addresses")
-    List<User> users;
-
-    @ManyToMany
-    List<Service> services;
-
-    @OneToMany
-    List<Counter> counters;
 
 
 }

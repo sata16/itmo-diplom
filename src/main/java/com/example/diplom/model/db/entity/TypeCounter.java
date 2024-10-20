@@ -5,10 +5,9 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.FieldDefaults;
-
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.List;
+
 
 @Getter
 @Setter
@@ -39,6 +38,5 @@ public class TypeCounter {
     @Enumerated(EnumType.STRING)
     TypeCounterStatus status;
 
-    @OneToMany
-    List<Counter> counters;
+
 }

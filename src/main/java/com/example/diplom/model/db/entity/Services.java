@@ -1,5 +1,4 @@
 package com.example.diplom.model.db.entity;
-
 import com.example.diplom.model.enums.ServiceStatus;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -15,7 +14,7 @@ import java.util.List;
 @Entity
 @Table(name = "service")
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class Service {
+public class Services {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
@@ -36,6 +35,7 @@ public class Service {
     @Enumerated(EnumType.STRING)
     ServiceStatus status;
 
-    @ManyToMany(mappedBy = "services")
+
+    @ManyToMany
     List<Address> addresses;
 }

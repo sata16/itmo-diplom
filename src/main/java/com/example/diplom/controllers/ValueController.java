@@ -1,8 +1,6 @@
 package com.example.diplom.controllers;
-
-import com.example.diplom.model.dto.request.UserInfoRequest;
 import com.example.diplom.model.dto.request.ValueInfoRequest;
-import com.example.diplom.model.dto.response.UserInfoResponse;
+import com.example.diplom.model.dto.request.ValueToCounterRequest;
 import com.example.diplom.model.dto.response.ValueInfoResponse;
 import com.example.diplom.service.ValueService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -10,7 +8,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Collections;
+import javax.validation.Valid;
 import java.util.List;
 @Tag(name = "Показания по ИПУ")
 @RestController
@@ -21,7 +19,7 @@ public class ValueController {
 
     @PostMapping
     @Operation(summary = "Создать показание")
-    public ValueInfoResponse createValue(@RequestBody ValueInfoRequest request){
+    public ValueInfoResponse createValue(@RequestBody @Valid ValueInfoRequest request){
         return valueService.createValue(request);
     }
 
@@ -42,9 +40,16 @@ public class ValueController {
         valueService.deleteValue(id);
     }
 
-    @GetMapping("/all")
-    @Operation(summary = "Получить все показания")
-    public List<ValueInfoResponse> getAllValue(){
-        return valueService.getAllValue();
+    @GetMapping("/all/{id}")
+    @Operation(summary = "Получить все показания по id прибора учета")
+    public List<ValueInfoResponse> getAllValueToCounter(@PathVariable Long id){
+        return valueService.getAllValueToCounter(id);
     }
+
+    @PostMapping("/valueToCounter")
+    @Operation(summary = "Добавить показания к прибору учета")
+    public void addValueToCounter(@RequestBody @Valid ValueToCounterRequest request){
+        valueService.addValueToCounter(request);
+    }
+
 }

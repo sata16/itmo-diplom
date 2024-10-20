@@ -21,7 +21,6 @@ public class UserInfoRequest {
     String firstName;
     String lastName;
     String middleName;
-    @NotNull
     AttributeUser attributeUser;
 
 }

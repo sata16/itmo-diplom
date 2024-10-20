@@ -5,6 +5,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.FieldDefaults;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -21,6 +22,7 @@ public class Value {
     Long id;
 
     @Column(name = "period")
+    @DateTimeFormat(pattern = "dd.MM.yyyy")
     LocalDate period;
 
     @Column(name = "value")

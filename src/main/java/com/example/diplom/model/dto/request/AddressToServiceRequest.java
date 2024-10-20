@@ -3,16 +3,18 @@ package com.example.diplom.model.dto.request;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import lombok.experimental.SuperBuilder;
-import org.springframework.format.annotation.DateTimeFormat;
 
-import java.time.LocalDate;
+import javax.validation.constraints.NotNull;
+
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class ValueInfoRequest {
-    LocalDate period;
-    Long value;
+public class AddressToServiceRequest {
+    @NotNull
+    Long serviceId;
+    @NotNull
+    Long addressId;
 }
