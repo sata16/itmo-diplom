@@ -62,7 +62,7 @@ public class UserService {
                 .orElseThrow(()->new CustomException("Пользователь не найден", HttpStatus.NOT_FOUND));
     }
     //Проверка статуса пользователя
-    private void controlStatus(Long id){
+    public void controlStatus(Long id){
         userRepository.findById(id).filter(user -> !user.getStatus().equals(UserStatus.DELETED)).orElseThrow(()->new CustomException("User has status DELETED", HttpStatus.BAD_REQUEST));
     }
 
