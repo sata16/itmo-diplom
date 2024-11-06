@@ -45,13 +45,19 @@ public class AddressController {
         addressService.deleteAddress(id);
     }
 
-    @GetMapping("/all")
-    @Operation(summary = "Получить все адреса")
-    public List<AddressInfoResponse> getAllAddress(){
-        return addressService.getAllAddress();
+//    @GetMapping("/all")
+//    @Operation(summary = "Получить все адреса")
+//    public List<AddressInfoResponse> getAllAddress(){
+//        return addressService.getAllAddress();
+//    }
+    @GetMapping("/allToUsers/{id}")
+    @Operation(summary = "Получить список адресов пользователя")
+    public List<AddressInfoResponse> getAllAddressToUser(@PathVariable Long id){
+        return addressService.getAllAddressToUser(id);
     }
+
     @GetMapping("/allAndCounter")
-    @Operation(summary = "Получить список адресов с ПУ")
+    @Operation(summary = "Получить список адресов с ПУ в разбивке на ИПУ,ОДПУ")
     public Page<AddressInfoResponse> getAllAddressAndCounter(@RequestParam(defaultValue = "1") Integer page,
                                           @RequestParam(defaultValue = "10") Integer perPage,
                                           @RequestParam(defaultValue = "nameDistrict") String sort,

@@ -7,6 +7,7 @@ import com.example.diplom.model.dto.request.AddressInfoRequest;
 import com.example.diplom.model.dto.response.AddressInfoResponse;
 import com.example.diplom.model.enums.AddressStatus;
 import com.example.diplom.model.enums.CounterStatus;
+import com.example.diplom.model.enums.UserStatus;
 import com.example.diplom.utils.PaginationUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
@@ -78,11 +79,11 @@ public class AddressService {
         addressRepository.save(address);
     }
 
-    public List<AddressInfoResponse> getAllAddress() {
-        return addressRepository.findAll().stream()
-                .map(address -> mapper.convertValue(address,AddressInfoResponse.class))
-                .collect(Collectors.toList());
-    }
+//    public List<AddressInfoResponse> getAllAddress() {
+//        return addressRepository.findAll().stream()
+//                .map(address -> mapper.convertValue(address,AddressInfoResponse.class))
+//                .collect(Collectors.toList());
+//    }
 
     //список адресов с приборами учета
     public Page<AddressInfoResponse> getAllAddressAndCounter(Integer page, Integer perPage, String sort, Sort.Direction order, String filter) {
@@ -114,5 +115,12 @@ public class AddressService {
                 .map(address -> mapper.convertValue(address, AddressInfoResponse.class))
                 .collect(Collectors.toList());
         return new PageImpl<>(content,pageRequest, all.getTotalElements());
+    }
+
+    public List<AddressInfoResponse> getAllAddressToUser(Long id) {
+
+        return addressRepository.findAddressesByUser(id, UserStatus.DELETED).stream()
+                .map(address -> mapper.convertValue(address, AddressInfoResponse.class))
+                .collect(Collectors.toList());
     }
 }

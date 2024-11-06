@@ -9,7 +9,10 @@ import com.example.diplom.model.dto.request.CounterInfoRequest;
 import com.example.diplom.model.dto.request.CounterToAddressRequest;
 import com.example.diplom.model.dto.request.CounterToTypeCounterRequest;
 import com.example.diplom.model.dto.response.CounterInfoResponse;
+import com.example.diplom.model.dto.response.ServiceInfoResponse;
+import com.example.diplom.model.enums.AttributeCounter;
 import com.example.diplom.model.enums.CounterStatus;
+import com.example.diplom.model.enums.ServiceStatus;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -113,6 +116,10 @@ public class CounterService {
         counterRepository.save(counterFromDB);
     }
 
-
-
+    //список ИПУ по адресу
+    public List<CounterInfoResponse> getAllCounterToAddress(Long id, AttributeCounter attributeCounter) {
+        return counterRepository.findCounterByAddress(id, CounterStatus.CLOSED, attributeCounter).stream()
+                .map(counter -> mapper.convertValue(counter, CounterInfoResponse.class))
+                .collect(Collectors.toList());
+    }
 }

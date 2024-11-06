@@ -4,6 +4,8 @@ import com.example.diplom.model.dto.request.CounterInfoRequest;
 import com.example.diplom.model.dto.request.CounterToAddressRequest;
 import com.example.diplom.model.dto.request.CounterToTypeCounterRequest;
 import com.example.diplom.model.dto.response.CounterInfoResponse;
+import com.example.diplom.model.dto.response.ServiceInfoResponse;
+import com.example.diplom.model.enums.AttributeCounter;
 import com.example.diplom.service.CounterService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -59,6 +61,11 @@ public class CounterController {
     @Operation(summary = "Связать прибор учета с характеристиками")
     public void addCounterToTypeCounter(@RequestBody @Valid CounterToTypeCounterRequest request){
         counterService.addCounterToTypeCounter(request);
+    }
+    @GetMapping("/counterToAddress")
+    @Operation(summary = "Получить список ИПУ или ОДПУ по адресу")
+    public List<CounterInfoResponse> getAllCounterToAddress(@RequestParam Long id, @RequestParam AttributeCounter attributeCounter){
+        return counterService.getAllCounterToAddress(id, attributeCounter);
     }
 
 }

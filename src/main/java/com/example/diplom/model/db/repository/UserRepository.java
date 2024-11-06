@@ -23,6 +23,9 @@ public interface UserRepository extends JpaRepository<User,Long> {
     @Query("select us from User us join us.addresses a on a.id = :id and us.status <> :status")
             List<User>findUsersByAddresses(@Param("id") Long id,UserStatus status);
 
+
+
+
     //исключение дублирования email
     Optional<User> findByEmailIgnoreCase(String email);
 }
