@@ -9,15 +9,15 @@ import com.example.diplom.model.dto.request.CounterInfoRequest;
 import com.example.diplom.model.dto.request.CounterToAddressRequest;
 import com.example.diplom.model.dto.request.CounterToTypeCounterRequest;
 import com.example.diplom.model.dto.response.CounterInfoResponse;
-import com.example.diplom.model.dto.response.ServiceInfoResponse;
 import com.example.diplom.model.enums.AttributeCounter;
 import com.example.diplom.model.enums.CounterStatus;
-import com.example.diplom.model.enums.ServiceStatus;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -37,12 +37,31 @@ public class CounterService {
                 .ifPresent(counter->{
                     throw new CustomException(String.format("SerialNumber with number: %s already exists",request.getSerialNumber()),HttpStatus.BAD_REQUEST);
                 });
+        //проверка дата поверки
+        validateDataCheck(request);
+
+        //проверка дата установки
+        validateDataBegin(request);
 
         Counter counter = mapper.convertValue(request,Counter.class);
         counter.setCreatedAt(LocalDateTime.now());
         counter.setStatus(CounterStatus.OPENED);
 
         return mapper.convertValue(counterRepository.save(counter), CounterInfoResponse.class);
+    }
+
+    //проверка дата поверки не может быть раньше текущей даты
+    public void validateDataCheck (CounterInfoRequest request){
+        if(request.getDataCheck().isBefore(LocalDate.now())){
+            throw  new CustomException("Invalid dataCheck", HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    //дата установки не может быть после текущей даты
+    public void validateDataBegin(CounterInfoRequest request){
+        if(request.getDataBegin().isAfter(LocalDate.now())){
+            throw  new CustomException("Invalid dataBegin", HttpStatus.BAD_REQUEST);
+        }
     }
 
     //метод получения прибора учета
@@ -62,6 +81,8 @@ public class CounterService {
 
     public CounterInfoResponse updateCounter(Long id, CounterInfoRequest request) {
         Counter counter = getCounterFromDB(id);
+        validateDataBegin(request);
+        validateDataCheck(request);
 
         counter.setSerialNumber(request.getSerialNumber() == null ? counter.getSerialNumber() : request.getSerialNumber());
         counter.setDataBegin(request.getDataBegin() == null ? counter.getDataBegin() : request.getDataBegin());

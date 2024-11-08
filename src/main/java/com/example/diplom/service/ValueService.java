@@ -14,6 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
+import java.time.YearMonth;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -26,10 +27,21 @@ public class ValueService {
     private final ValueRepository valueRepository;
 
     public ValueInfoResponse createValue(ValueInfoRequest request) {
+        //проверка периода ввода показаний. показания можно ввести только в текущем периоде
+        validPeriod(request);
+
         Value value = mapper.convertValue(request, Value.class);
         value.setCreatedAt(LocalDateTime.now());
         value.setStatus(ValueStatus.CREATED);
         return mapper.convertValue(valueRepository.save(value),ValueInfoResponse.class);
+    }
+
+    //проверка периода ввода показаний. показания можно ввести только в текущем периоде
+    public void validPeriod(ValueInfoRequest request){
+        if(!YearMonth.now().equals(YearMonth.of(request.getPeriod().getYear(), request.getPeriod().getMonth()))) {
+            throw new CustomException("Invalid Period", HttpStatus.BAD_REQUEST);
+        } ;
+
     }
 
     //метод получения показания
@@ -50,7 +62,8 @@ public class ValueService {
 
     public ValueInfoResponse updateValue(Long id, ValueInfoRequest request) {
         Value value = getValueFromDB(id);
-        value.setPeriod(request.getPeriod() == null ? value.getPeriod() : request.getPeriod());
+        validPeriod(request);
+        value.setPeriod(request.getPeriod());
         value.setValue(request.getValue() == null ? value.getValue() : request.getValue());
 
         value.setUpdatedAt(LocalDateTime.now());
@@ -87,7 +100,7 @@ public class ValueService {
     public List<ValueInfoResponse> getAllValueToCounter(Long id) {
 
             //Проверка наличия прибора учета
-            Counter counterFromDB = counterService.getCounterFromDB(id);
+            counterService.getCounterFromDB(id);
             //Проверка статуса прибора учета
             counterService.controlStatus(id);
 
